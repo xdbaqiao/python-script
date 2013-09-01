@@ -2,6 +2,7 @@
 #coding: utf-8
 
 import re
+import gzip
 import string
 import urllib
 import urllib2
@@ -33,6 +34,8 @@ class download:
         request = urllib2.Request(url)
         response = self.opener.open(request)
         html = response.read()
+        if response.header.get('content-encoding') == 'gzip':
+            html = gzip.GzipFile(fileobj=StringIO(html)).read()
         return html
 
     def post(self, url, data):
@@ -42,6 +45,8 @@ class download:
         request = urllib2.Request(url, data, self.headers)
         response = self.opener.open(request)
         html = response.read()
+        if response.header.get('content-encoding') == 'gzip':
+            html = gzip.GzipFile(fileobj=StringIO(html)).read()
         return html
 
 def fetch():
